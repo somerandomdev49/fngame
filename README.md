@@ -17,3 +17,28 @@ $ ninja
 <pre align="center">
 $ build/main
 </pre>
+
+<h4 align="center">- editor configs -</h4>
+<h5 align="center">- vscode -</h5>
+
+JSON Schemas:
+
+```json
+// Add this to your settings.json file
+"json.schemas": [
+    {
+        "fileMatch": [
+            "*.fnscene.json",
+            "*.fnscene"
+        ],
+        "url": "./fnscene.schema.json"
+    },
+    {
+        "fileMatch": [
+            "*.fnmanifest.json",
+            "*.fnmanifest"
+        ],
+        "url": "./fnmanifest.schema.json"
+    }
+],
+```

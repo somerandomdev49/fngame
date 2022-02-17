@@ -8,6 +8,8 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <typeindex>
+#include <typeinfo>
 
 #include <GL/gl3w.h>
 #include <GLFW/glfw3.h>
@@ -21,6 +23,8 @@
 
 #include <log.hpp>
 #include <fngame_json.hpp>
+
+using namespace std::literals;
 
 namespace graphics
 {
@@ -59,6 +63,9 @@ namespace graphics
 		glfwPollEvents();
 	}
 
+	class Shader {};
+	class Texture {};
+
 	namespace ui
 	{
 		class Font
@@ -90,7 +97,7 @@ namespace base
 		{
 			std::string text;
 			WidgetSize size;
-			std::shared_ptr<graphics::ui::Font> font;
+			graphics::ui::Font *font;
 		};
 	}
 }
@@ -154,15 +161,47 @@ namespace world
 	};
 } // namespace world
 
+std::map<std::string, std::type_index> assetTypeMap =
+{
+	{"base.ui.font"s, std::type_index(typeid(graphics::ui::Font))},
+	{"base.texture"s, std::type_index(typeid(graphics::Texture))},
+	{"base.shader"s, std::type_index(typeid(graphics::Shader))},
+};
+
 class AssetManager
 {
 public:
+	void init(const std::string &manifestPath)
+	{
+		std::ifstream ifs(manifestPath);
+		nlohmann::json j;
+		ifs >> j;
+		loadFromJson(j);
+	}
+
 	template<typename T>
-	std::shared_ptr<T> get(const std::string &name)
+	T *get(const std::string &name)
 	{
 		(void)name;
 		return nullptr;
 	}
+
+private:
+	void loadFromJson(const nlohmann::json &j)
+	{
+
+	}
+
+	struct Res
+	{
+		void *data;
+		bool loaded;
+
+		Res() : data(nullptr), loaded(false) {}
+		Res(void *v) : data(v), loaded(true) {}
+	};
+
+	std::map<std::type_index, std::map<std::string, Res>> data_;
 } assetManager;
 
 namespace nlohmann

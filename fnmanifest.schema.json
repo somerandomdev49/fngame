@@ -1,0 +1,37 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema",
+	"$id": "FNGame Manifest Schema",
+	"title": "FNGame Manifest",
+	"description": "Asset Manifest",
+	"type": "object",
+	"properties": {
+		"assets": {
+			"description": "Asset List",
+			"type": "array",
+			"items": {
+                "description": "Asset",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Asset name",
+                        "type": "string"
+                    },
+                    "path": {
+                        "description": "Path to the asset",
+                        "type": "string"
+                    }                
+				}
+			},
+			"required": ["name", "nodes"]
+		},
+        "root": {
+            "description": "Root path to all of the assets",
+            "type": "string"
+        },
+		"version": {
+			"description": "Manifest schema version",
+			"type": "integer"
+		}
+	},
+	"required": [ "version", "assets" ]
+}

@@ -1,0 +1,14 @@
+{
+    "version": 0,
+    "root": "data/",
+    "assets": [
+        {
+            "name": "shader.basic",
+            "path": "shaders/basic.glsl"
+        },
+        {
+            "name": "texture.hero",
+            "path": "textures/hero.png"
+        }
+    ]
+}

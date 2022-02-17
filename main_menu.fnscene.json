@@ -1,5 +1,4 @@
 {
-	"$schema": "file:///home/somerandomdev/fngame/fnscene.schema.json",
 	"version": 0,
 	"scene": {
 		"name": "Main Menu",

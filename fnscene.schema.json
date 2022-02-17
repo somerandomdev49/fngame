@@ -1,0 +1,54 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema",
+	"$id": "FNGame Scene Schema",
+	"title": "FNGame Scene",
+	"description": "Scene description object",
+	"type": "object",
+	"properties": {
+		"scene": {
+			"description": "Scene info",
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "Scene name",
+					"type": "string"
+				},
+				"nodes": {
+					"description": "The nodes of the scene",
+					"type": "array",
+					"items": {
+						"description": "A node of a scene",
+						"type": "object",
+						"properties": {
+							"tag": {
+								"description": "The node's tag",
+								"type": "string"
+							},
+							"components": {
+								"description": "The node's components",
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"@type": {
+											"description": "The component's registered type",
+											"type": "string"
+										}
+									},
+									"required": ["@type"]
+								}
+							}
+						},
+						"required": ["tag"]
+					}
+				}
+			},
+			"required": ["name", "nodes"]
+		},
+		"version": {
+			"description": "Scene info schema version",
+			"type": "integer"
+		}
+	},
+	"required": [ "version", "scene" ]
+}

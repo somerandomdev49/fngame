@@ -11,7 +11,6 @@
 
 #include <nlohmann/json.hpp>
 
-
 #ifndef NLOHMANN_OPT_HELPER
 #define NLOHMANN_OPT_HELPER
 namespace nlohmann
@@ -21,14 +20,18 @@ namespace nlohmann
 	{
 		static void to_json(json &j, const std::shared_ptr<T> &opt)
 		{
-			if(!opt) j = nullptr;
-			else j = *opt;
+			if(!opt)
+				j = nullptr;
+			else
+				j = *opt;
 		}
 
 		static std::shared_ptr<T> from_json(const json &j)
 		{
-			if(j.is_null()) return std::unique_ptr<T>();
-			else return std::unique_ptr<T>(new T(j.get<T>()));
+			if(j.is_null())
+				return std::unique_ptr<T>();
+			else
+				return std::unique_ptr<T>(new T(j.get<T>()));
 		}
 	};
 } // namespace nlohmann
@@ -186,6 +189,86 @@ namespace nlohmann
 	{
 		j            = json::object();
 		j["scene"]   = x.scene;
+		j["version"] = x.version;
+	}
+} // namespace nlohmann
+
+namespace fngame_json
+{
+	/**
+	 * Asset
+	 */
+	struct Asset
+	{
+		/**
+		 * Asset name
+		 */
+		std::string name;
+		/**
+		 * Path to the asset
+		 */
+		std::string path;
+		/**
+		 * Type of the asset
+		 */
+		std::string type;
+	};
+
+	/**
+	 * Asset Manifest
+	 */
+	struct FnManifest
+	{
+		/**
+		 * Asset List
+		 */
+		std::vector<Asset> assets;
+		/**
+		 * Root path to all of the assets
+		 */
+		std::string root;
+		/**
+		 * Manifest schema version
+		 */
+		int64_t version;
+	};
+} // namespace fngame_json
+
+namespace nlohmann
+{
+	void from_json(const json &j, fngame_json::Asset &x);
+	void to_json(json &j, const fngame_json::Asset &x);
+
+	void from_json(const json &j, fngame_json::FnManifest &x);
+	void to_json(json &j, const fngame_json::FnManifest &x);
+
+	inline void from_json(const json &j, fngame_json::Asset &x)
+	{
+		x.name = j.at("name").get<std::string>();
+		x.path = j.at("path").get<std::string>();
+		x.type = j.at("type").get<std::string>();
+	}
+
+	inline void to_json(json &j, const fngame_json::Asset &x)
+	{
+		j         = json::object();
+		j["name"] = x.name;
+		j["path"] = x.path;
+		j["type"] = x.type;
+	}
+
+	inline void from_json(const json &j, fngame_json::FnManifest &x)
+	{
+		x.assets  = j.at("assets").get<std::vector<fngame_json::Asset>>();
+		x.root    = j.at("root").get<std::string>();
+		x.version = j.at("version").get<int64_t>();
+	}
+
+	inline void to_json(json &j, const fngame_json::FnManifest &x)
+	{
+		j            = json::object();
+		j["assets"]  = x.assets;
+		j["root"]    = x.root;
 		j["version"] = x.version;
 	}
 } // namespace nlohmann

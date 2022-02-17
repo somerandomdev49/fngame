@@ -16,13 +16,17 @@
                         "description": "Asset name",
                         "type": "string"
                     },
+                    "type": {
+                        "description": "Asset type",
+                        "type": "string"
+                    },
                     "path": {
                         "description": "Path to the asset",
                         "type": "string"
                     }                
-				}
-			},
-			"required": ["name", "nodes"]
+				},
+				"required": ["name", "type", "path"]
+			}
 		},
         "root": {
             "description": "Root path to all of the assets",

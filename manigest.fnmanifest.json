@@ -4,11 +4,13 @@
     "assets": [
         {
             "name": "shader.basic",
-            "path": "shaders/basic.glsl"
+            "path": "shaders/basic.glsl",
+            "type": "shader"
         },
         {
             "name": "texture.hero",
-            "path": "textures/hero.png"
+            "path": "textures/hero.png",
+            "type": "texture"
         }
     ]
 }

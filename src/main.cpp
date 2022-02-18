@@ -21,6 +21,7 @@
 #include <nlohmann/json.hpp>
 
 #include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include <log.hpp>
 #include <fngame_json.hpp>
@@ -68,6 +69,22 @@ namespace graphics
 		glfwPollEvents();
 	}
 
+	float getTime()
+	{
+		return glfwGetTime();
+	}
+
+	struct Camera
+	{
+		glm::vec2 center;
+		glm::vec2 extent;
+
+		glm::mat4 getMatrix()
+		{
+			return glm::ortho(center.x - extent.x / 2, center.x + extent.x / 2, center.y - extent.y / 2, center.y + extent.y / 2);
+		}
+	};
+
 	class Shader
 	{
 	};
@@ -90,6 +107,15 @@ namespace base
 		glm::vec2 pos;
 		float rot;
 		glm::vec2 scl;
+
+		glm::mat4 getMatrix()
+		{
+			glm::mat4 m(1.0f);
+			m *= glm::scale(glm::mat4(1.0f), glm::vec3(scl.x, scl.y, 1));
+			m *= glm::translate(glm::mat4(1.0f), glm::vec3(pos.x, pos.y, 0));
+			m *= glm::mat4_cast(glm::quat(glm::vec3(0, 0, rot)));
+			return m;
+		}
 	};
 
 	namespace ui
@@ -343,10 +369,17 @@ int main()
 
 	currentScene.init("data/main_menu.fnscene.json");
 
+	float lastTime = graphics::getTime();
 	while(!graphics::shouldClose())
 	{
+		float curTime = graphics::getTime();
+		float dt = curTime - lastTime;
 
+		// currentScene.update(dt);
+		// currentScene.render(renderer);
+		
 		graphics::frame();
+		lastTime = curTime;
 	}
 
 	currentScene.done();

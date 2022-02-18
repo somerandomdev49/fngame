@@ -43,6 +43,10 @@ namespace graphics
 		glfwSetErrorCallback(&errorGlfw);
 		glfwInit();
 
+#ifdef __APPLE__
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 		window = glfwCreateWindow(800, 600, "fngame", NULL, NULL);
@@ -126,6 +130,10 @@ namespace world
 		{
 			nlohmann::json j;
 			std::ifstream ifs(fname);
+			if(!ifs) {
+				srd::log::cerr << "No such file: " << fname << srd::log::endl;
+				return;
+			}
 			ifs >> j;
 
 			loadFromJson(j);
@@ -176,6 +184,10 @@ public:
 	void init(const std::string &manifestPath)
 	{
 		std::ifstream ifs(manifestPath);
+		if(!ifs) {
+			srd::log::cerr << "No such file: " << manifestPath << srd::log::endl;
+			return;
+		}
 		nlohmann::json j;
 		ifs >> j;
 		loadFromJson(j);
@@ -204,7 +216,7 @@ private:
 
 		for(const auto &asset : manifest.assets)
 		{
-			// ...
+			srd::log::cout << asset.name << " -> " << getPath(asset.path) << srd::log::endl;
 		}
 	}
 
@@ -325,9 +337,11 @@ int main()
 {
 	if(!graphics::setup()) return 1;
 
+	assetManager.init("data/manifest.fnmanifest.json");
+
 	world::Scene currentScene;
 
-	currentScene.init("main_menu.json");
+	currentScene.init("data/main_menu.fnscene.json");
 
 	while(!graphics::shouldClose())
 	{

@@ -1,16 +1,35 @@
 warnflags = -Wall -Wextra -Wno-unused-function
 cflags = $warnflags -std=c99
-cxxflags = $warnflags -std=c++20  -D_LIBCPP_DISABLE_AVAILABILITY
-ldflags = -lglfw3 -framework Cocoa -framework IOKit -Wl,-rpath,/usr/local/opt/llvm/lib -L/usr/local/opt/llvm/lib
+
+@if is %$CLANG_MACOS_VERSION_NOERROR%
+  @set CXXFLAGS_2 -D_LIBCPP_DISABLE_AVAILABILITY
+@fi
+
+cxxflags = $warnflags -std=c++20 %$CXXFLAGS% %$CXXFLAGS_2%
+
+@if eq %$platform%, Linux
+ldflags = -lglfw -ldl
+@fi
+
+@if eq %$platform%, Darwin
+  @if is %$OWNLIBCXX%
+    @set ADDIT_LDFLAGS -Wl,-rpath,%$OWNLIBCXX% -L%$OWNLIBCXX% 
+  @fi
+ldflags = -lglfw3 -framework Cocoa -framework IOKit %$ADDIT_LDFLAGS%
+@fi
+
 
 rule cc
   command = clang -c $in -o $out -Iinclude $cflags -fdiagnostics-color
 
+
 rule cxx
   command = clang++ -c $in -o $out -Iinclude $cxxflags -fdiagnostics-color
 
+
 rule ld
   command = clang++ $in -o $out $ldflags
+
 
 build build/log.o: cxx src/log.cpp
 build build/main.o: cxx src/main.cpp

@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+echo "Deprecated, use build.py! (same interface) Set \$run_deprecated to run this script."
+[ -n "$run_deprecated" ] || { exit 1; }
 
 python=${python:-"py"}
 ninjax=${ninjax:-"tools/ninjax.py"}
@@ -17,5 +20,5 @@ if [[ $(uname) -eq "Darwin" ]]; then
         $python $ninjax $_argd $ninjax_args
     fi
 else
-    $python $ninjax $ninjax_default_args $ninjax_args
+    $python $ninjax $_argd $ninjax_args
 fi

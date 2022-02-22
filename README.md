@@ -8,16 +8,16 @@
 Buildable on WSL2 and MacOS ≥10.13. 
 
 <pre align="center">
-$ ./build.sh
+$ python tools/build.py
 </pre>
 
 <h4 align="center">- building on MacOS &lt;10.15 -</h4>
 
 <pre align="center">
-$ python=python3 custom_libcxx=1 sh tools/build.sh
+$ python=python3 custom_libcxx=1 python3 tools/build.py
 </pre>
 
-<h4 align="center">- build.sh options -</h4>
+<h4 align="center">- tools/build.py options -</h4>
 
 - Change the python executable by setting `$python`. (Default: `python`)
 - Change the ninjax script by setting `$ninjax`. (Default: `tools/ninjax.py`)
